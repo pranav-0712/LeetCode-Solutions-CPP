@@ -1,0 +1,20 @@
+name: Build & test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile and run every solution
+        run: |
+          set -e
+          for f in $(find . -name '*.cpp' -not -path './.git/*'); do
+            echo "::group::$f"
+            g++ -std=c++17 -Wall -Wextra -Werror -O2 -o solution "$f"
+            ./solution
+            echo "::endgroup::"
+          done
